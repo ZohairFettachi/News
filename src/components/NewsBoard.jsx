@@ -8,7 +8,7 @@ const NewsBoard = ({ category }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    let url = `${import.meta.env.VITE_API_URL}/news?category=${category}`;
+    let url = `/api/news?category=${category}`;
     console.log('Fetching from URL:', url);
     
     setLoading(true);
