@@ -2,6 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
+const path = require('path');
 require('dotenv').config();
 
 // Debug line
@@ -11,9 +12,25 @@ console.log('API Key status:', process.env.NEWSAPI_KEY ? 'Present' : 'Missing');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Basic middleware
-app.use(cors());
+// Enhanced CORS configuration
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json());
+
+// Rate limiting to prevent abuse
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+// Apply rate limiting to API routes
+app.use('/api', apiLimiter);
 
 // Simple test route
 app.get('/api/test', (req, res) => {
@@ -61,6 +78,25 @@ app.get('/api/news', async (req, res) => {
   }
 });
 
+// Serve static files if in production
+if (process.env.NODE_ENV === 'production') {
+  // Serve static files from the dist directory
+  app.use(express.static(path.join(__dirname, 'dist')));
+  
+  // For any other route, send the index.html file
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  });
+}
+
+// Catch-all route for any unhandled routes
+app.use((req, res) => {
+  console.log(`404 Not Found: ${req.method} ${req.originalUrl}`);
+  res.status(404).json({ error: 'Endpoint not found' });
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  console.log(`Test API available at: http://localhost:${PORT}/api/test`);
+  console.log(`News API available at: http://localhost:${PORT}/api/news`);
 });
