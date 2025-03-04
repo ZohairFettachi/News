@@ -65,59 +65,67 @@ const NewsBoard = ({ category }) => {
   }, [category]);
 
   if (loading) return (
-    <div className="d-flex justify-content-center my-5">
-      <div className="spinner-border text-primary" role="status">
-        <span className="visually-hidden">Loading...</span>
+    <div className="loading-container">
+      <div className="loading-spinner">
+        <div className="spinner-circle"></div>
+        <div className="spinner-text">Loading News</div>
       </div>
     </div>
   );
   
   if (error) return (
-    <div className="alert alert-danger text-center my-5" role="alert">
-      <h4 className="alert-heading">Error!</h4>
-      <p>{error}</p>
-      <hr />
-      <p className="mb-0">Please try again later or check the console for more details.</p>
+    <div className="error-container">
+      <div className="error-icon">!</div>
+      <h3 className="error-title">Something went wrong</h3>
+      <p className="error-message">{error}</p>
+      <p className="error-help">Please try again later or check the console for more details.</p>
     </div>
   );
 
   return (
-    <div className="container-fluid py-4">
-      <div className="row mb-4">
-        <div className="col-12">
-          <h2 className="text-center mb-4">
-            Latest <span className="badge bg-danger">News</span>
-          </h2>
-          <div className="news-category-tag bg-dark text-white d-inline-block py-1 px-3 rounded-pill mb-4 mx-auto d-block text-center">
-            {category.charAt(0).toUpperCase() + category.slice(1)}
-          </div>
+    <div className="news-container">
+      <header className="news-header">
+        <h1 className="news-main-title">
+          Today's <span className="highlight">Headlines</span>
+        </h1>
+        <div className="category-badge">
+          {category.charAt(0).toUpperCase() + category.slice(1)}
         </div>
-      </div>
+      </header>
       
       {articles.length > 0 ? (
-        <div className="row g-4">
-          {articles.map((news, index) => (
-            <div 
-              className="col-12 col-sm-6 col-md-4 col-lg-3" 
-              key={index}
-            >
+        <>
+          {/* Featured Article (first article) */}
+          {articles.length > 0 && (
+            <div className="featured-article">
               <NewsItem
+                title={articles[0].title}
+                description={articles[0].description}
+                src={articles[0].urlToImage}
+                url={articles[0].url}
+              />
+            </div>
+          )}
+          
+          {/* Regular Articles Grid */}
+          <div className="news-grid">
+            {articles.slice(1).map((news, index) => (
+              <NewsItem
+                key={index + 1}
                 title={news.title}
                 description={news.description}
                 src={news.urlToImage}
                 url={news.url}
               />
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="row">
-          <div className="col-12">
-            <div className="alert alert-info text-center">
-              <i className="bi bi-info-circle me-2"></i>
-              No news available for this category. Please try a different one.
-            </div>
+            ))}
           </div>
+        </>
+      ) : (
+        <div className="empty-state">
+          <div className="empty-icon">📰</div>
+          <h3 className="empty-title">No news available</h3>
+          <p className="empty-message">There are no articles available for the "{category}" category at this time.</p>
+          <p className="empty-help">Please try selecting a different category.</p>
         </div>
       )}
     </div>
