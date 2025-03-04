@@ -23,8 +23,7 @@ app.get('/api/test', (req, res) => {
 // News route
 app.get('/api/news', async (req, res) => {
   const { category } = req.query;
-  
-  console.log('News request received for category:', category);
+  console.log('Received request for category:', category);
   
   try {
     const response = await axios.get('https://newsapi.org/v2/top-headlines', {
@@ -35,13 +34,12 @@ app.get('/api/news', async (req, res) => {
       }
     });
 
-    console.log('News API response received');
     res.json(response.data);
   } catch (error) {
-    console.error('Error details:', error.response?.data || error.message);
+    console.error('Error:', error);
     res.status(500).json({ 
       error: 'Failed to fetch news', 
-      details: error.response?.data || error.message 
+      details: error.message 
     });
   }
 });
