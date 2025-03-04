@@ -82,14 +82,25 @@ const NewsBoard = ({ category }) => {
   );
 
   return (
-    <div>
-      <h2 className="text-center">
-        Latest <span className="badge bg-danger">News</span>
-      </h2>
+    <div className="container-fluid py-4">
+      <div className="row mb-4">
+        <div className="col-12">
+          <h2 className="text-center mb-4">
+            Latest <span className="badge bg-danger">News</span>
+          </h2>
+          <div className="news-category-tag bg-dark text-white d-inline-block py-1 px-3 rounded-pill mb-4 mx-auto d-block text-center">
+            {category.charAt(0).toUpperCase() + category.slice(1)}
+          </div>
+        </div>
+      </div>
+      
       {articles.length > 0 ? (
-        <div className="row">
+        <div className="row g-4">
           {articles.map((news, index) => (
-            <div className="col-md-4 mb-3" key={index}>
+            <div 
+              className="col-12 col-sm-6 col-md-4 col-lg-3" 
+              key={index}
+            >
               <NewsItem
                 title={news.title}
                 description={news.description}
@@ -100,7 +111,14 @@ const NewsBoard = ({ category }) => {
           ))}
         </div>
       ) : (
-        <p className="text-center">No news available. Please try a different category.</p>
+        <div className="row">
+          <div className="col-12">
+            <div className="alert alert-info text-center">
+              <i className="bi bi-info-circle me-2"></i>
+              No news available for this category. Please try a different one.
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
