@@ -1,10 +1,16 @@
 {
     "version": 2,
     "builds": [
-      { "src": "api/index.js", "use": "@vercel/node" }
+      { "src": "server.js", "use": "@vercel/node" },
+      { "src": "package.json", "use": "@vercel/static-build", "config": { "distDir": "dist" } }
     ],
     "routes": [
-      { "src": "/api/(.*)", "dest": "api/index.js" }
-    ]
+      { "src": "/api/(.*)", "dest": "server.js" },
+      { "handle": "filesystem" },
+      { "src": "/(.*)", "dest": "/index.html" }
+    ],
+    "env": {
+      "NEWSAPI_KEY": "2ff03e4027004e5a84c6c5c81f179259"
+    }
   }
   

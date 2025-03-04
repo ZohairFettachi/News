@@ -95,8 +95,14 @@ app.use((req, res) => {
   res.status(404).json({ error: 'Endpoint not found' });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Test API available at: http://localhost:${PORT}/api/test`);
-  console.log(`News API available at: http://localhost:${PORT}/api/news`);
-});
+// For local development
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+    console.log(`Test API available at: http://localhost:${PORT}/api/test`);
+    console.log(`News API available at: http://localhost:${PORT}/api/news`);
+  });
+}
+
+// Export the Express API for Vercel
+module.exports = app;
