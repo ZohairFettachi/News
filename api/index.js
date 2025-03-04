@@ -1,30 +1,14 @@
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
-const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
-// Debug line
-console.log('Starting server...');
-console.log('API Key status:', process.env.NEWSAPI_KEY ? 'Present' : 'Missing');
-
 const app = express();
-const PORT = process.env.PORT || 3002;
-
-// Basic middleware
 app.use(cors());
 app.use(express.json());
 
-// Simple test route
-app.get('/api/test', (req, res) => {
-  res.json({ message: 'Server is working' });
-});
-
-// News route
 app.get('/api/news', async (req, res) => {
   const { category } = req.query;
-  
-  console.log('News request received for category:', category);
   
   try {
     const response = await axios.get('https://newsapi.org/v2/top-headlines', {
@@ -35,10 +19,8 @@ app.get('/api/news', async (req, res) => {
       }
     });
 
-    console.log('News API response received');
     res.json(response.data);
   } catch (error) {
-    console.error('Error details:', error.response?.data || error.message);
     res.status(500).json({ 
       error: 'Failed to fetch news', 
       details: error.response?.data || error.message 
@@ -46,6 +28,5 @@ app.get('/api/news', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// This is important for Vercel
+module.exports = app; 

@@ -4,22 +4,34 @@ import NewsItem from './NewsItem';
 
 const NewsBoard = ({ category }) => {
   const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    let url = `${process.env.NEXT_PUBLIC_API_URL}/news?category=${category}`;
-
+    let url = `${import.meta.env.VITE_API_URL}/news?category=${category}`;
+    console.log('Fetching from URL:', url);
+    
+    setLoading(true);
+    setError(null);
 
     axios.get(url)
       .then(response => {
         if (!response.data.articles) {
-          console.error("No articles found!", response.data);
-          setArticles([]); // Prevents .map() errors
+          setError("No articles found");
+          setArticles([]);
         } else {
           setArticles(response.data.articles);
         }
       })
-      .catch(err => console.error("Fetch error:", err));
+      .catch(err => {
+        setError("Failed to fetch news");
+        setArticles([]);
+      })
+      .finally(() => setLoading(false));
   }, [category]);
+
+  if (loading) return <div className="text-center">Loading...</div>;
+  if (error) return <div className="text-center text-danger">{error}</div>;
 
   return (
     <div>
