@@ -1,20 +1,20 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 import NewsItem from './NewsItem';
 
 const NewsBoard = ({ category }) => {
   const [articles, setArticles] = useState([]);
 
   useEffect(() => {
-    let url = `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=2ff03e4027004e5a84c6c5c81f179259`;
+    let url = `/api/news?category=${category}`; // Calls your backend
 
-    fetch(url)
-      .then(response => response.json())
-      .then(data => {
-        if (!data.articles) {
-          console.error("No articles found!", data);
+    axios.get(url)
+      .then(response => {
+        if (!response.data.articles) {
+          console.error("No articles found!", response.data);
           setArticles([]); // Prevents .map() errors
         } else {
-          setArticles(data.articles);
+          setArticles(response.data.articles);
         }
       })
       .catch(err => console.error("Fetch error:", err));
