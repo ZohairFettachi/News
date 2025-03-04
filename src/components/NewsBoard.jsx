@@ -6,7 +6,8 @@ const NewsBoard = ({ category }) => {
   const [articles, setArticles] = useState([]);
 
   useEffect(() => {
-    let url = `/api/news?category=${category}`; // Calls your backend
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/news?category=${category}`;
+
 
     axios.get(url)
       .then(response => {
