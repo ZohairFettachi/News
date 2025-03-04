@@ -85,9 +85,6 @@ const NewsBoard = ({ category }) => {
   return (
     <div className="news-container">
       <header className="news-header">
-        <h1 className="news-main-title">
-          Today's <span className="highlight">Headlines</span>
-        </h1>
         <div className="category-badge">
           {category.charAt(0).toUpperCase() + category.slice(1)}
         </div>

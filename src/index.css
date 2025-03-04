@@ -56,6 +56,7 @@ body {
   position: relative;
   padding: 0.5rem 1rem;
   font-size: 0.95rem;
+  cursor: pointer;
 }
 
 .nav-link:hover {
@@ -136,11 +137,23 @@ body {
 }
 
 .featured-article .news-card {
-  height: 500px;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  min-height: 450px;
+}
+
+.featured-article .news-img-container {
+  height: 300px;
 }
 
 .featured-article .news-title {
   font-size: 1.8rem;
+  margin-top: var(--spacing-md);
+}
+
+.featured-article .news-content {
+  padding: var(--spacing-lg);
 }
 
 /* News Grid */
@@ -153,12 +166,15 @@ body {
 /* News Card */
 .news-card {
   position: relative;
-  height: 380px;
+  height: auto;
+  min-height: 380px;
   border-radius: var(--border-radius);
   overflow: hidden;
   box-shadow: var(--box-shadow);
   background-color: var(--card-bg);
   transition: var(--transition);
+  display: flex;
+  flex-direction: column;
 }
 
 .news-card:hover {
@@ -175,8 +191,9 @@ body {
 /* News Image Container */
 .news-img-container {
   position: relative;
-  height: 200px;
+  height: 180px;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .news-img {
@@ -196,7 +213,8 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.8));
+  background: linear-gradient(to bottom, transparent 80%, rgba(0, 0, 0, 0.5));
+  pointer-events: none;
 }
 
 /* News Content */
@@ -206,6 +224,7 @@ body {
   display: flex;
   flex-direction: column;
   position: relative;
+  background-color: var(--card-bg);
 }
 
 .news-title {
@@ -388,7 +407,11 @@ body {
   }
   
   .featured-article .news-card {
-    height: 450px;
+    min-height: 400px;
+  }
+  
+  .featured-article .news-img-container {
+    height: 250px;
   }
   
   .featured-article .news-title {
@@ -409,12 +432,16 @@ body {
     font-size: 1.8rem;
   }
   
-  .featured-article .news-card {
-    height: 400px;
+  .featured-article .news-img-container {
+    height: 220px;
   }
   
   .news-card {
-    height: 350px;
+    min-height: 350px;
+  }
+  
+  .news-img-container {
+    height: 160px;
   }
 }
 
@@ -431,9 +458,11 @@ body {
     grid-template-columns: 1fr;
   }
   
-  .featured-article .news-card,
-  .news-card {
-    height: auto;
-    min-height: 350px;
+  .featured-article .news-img-container {
+    height: 200px;
+  }
+  
+  .news-img-container {
+    height: 180px;
   }
 }
